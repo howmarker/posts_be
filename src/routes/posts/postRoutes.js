@@ -12,6 +12,7 @@ router.get('/:id',postController.getOne)
 router.use(verifyJWT)
 router.post('/',postController.create)
 router.post('/:id',postController.updateOne)
+router.delete('/:id',postController.deletePost)
 
 //verify role
 router.post('/change-status/:id',verifyRoles([ROLES.ADMIN]),postController.changeStatus)

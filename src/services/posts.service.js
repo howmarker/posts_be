@@ -13,7 +13,6 @@ const findOne = async (key, value) => {
   return data[0];
 };
 
-
 const update = async (keys, values, keyCondition, valueCondition) => {
   let queryUpdate = "";
   keys.forEach((key, index) => {
@@ -26,4 +25,6 @@ const update = async (keys, values, keyCondition, valueCondition) => {
   ]);
 };
 
-module.exports = { get, create, findOne, update };
+const deletePost = (id) => db.query(`DELETE FROM post WHERE id = ?`, [id]);
+
+module.exports = { get, create, findOne, update, deletePost };

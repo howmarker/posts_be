@@ -2,6 +2,7 @@ const moment = require("moment/moment");
 const statusPost = require("../../constants/status");
 const AppError = require("../../errors/AppError");
 const postService = require("../../services/posts.service");
+const ROLES = require("../../constants/roles");
 
 const getAll = async (req, res) => {
   const data = await postService.get();
@@ -41,10 +42,10 @@ const updateOne = async (req, res) => {
   const { id } = req.params;
   const { title, desc, user_id } = req.body;
 
-  const findPost = await postService.findOne('id', id);
+  const findPost = await postService.findOne("id", id);
 
   if (!findPost) throw new AppError("not found", 404);
-  if(findPost.user_id !== user_id)  throw new AppError("unauthorized", 401);
+  if (findPost.user_id !== user_id) throw new AppError("unauthorized", 401);
 
   await postService.update(
     ["title", "description", "updated_at"],
@@ -60,4 +61,25 @@ const updateOne = async (req, res) => {
   res.sendStatus(200);
 };
 
-module.exports = { getAll, create, getOne, changeStatus, updateOne };
+const deletePost = async (req, res) => {
+  const { id } = req.params;
+  const { user_id, role } = req.body;
+
+  const findPost = await postService.findOne("id", id);
+
+  if (!findPost) throw new AppError("not found", 404);
+  if (findPost.user_id !== user_id && !role.find((r) => r === ROLES.ADMIN))
+    throw new AppError("unauthorized", 401);
+  postService.deletePost(id);
+
+  res.sendStatus(200);
+};
+
+module.exports = {
+  getAll,
+  create,
+  getOne,
+  changeStatus,
+  updateOne,
+  deletePost,
+};
