@@ -1,6 +1,5 @@
-const AppError = require("../errors/AppError");
-const userService = require("../services/user.service");
-const bcrypt = require("bcrypt");
+const AppError = require("../../errors/AppError");
+const userService = require("../../services/user.service");
 
 const get = async (req, res) => {
   const data = await userService.get();
@@ -8,17 +7,7 @@ const get = async (req, res) => {
   res.send(data);
 };
 
-const create = async (req, res) => {
-  const { username, password: pwd } = req.body;
-  if (!username || !pwd)
-    throw new AppError("Username and password are requied", 400);
-  const findOne = await userService.findByName(username);
-  if (findOne.length > 0) throw new AppError(`${username} is existing in db`, 409);
-  const password = bcrypt.hashSync(pwd, +process.env.ROUND_HASH);
 
-  await userService.create(username, password);
-  res.sendStatus(201)
-};
 
 const findOne = async(req,res) => {
     const {id} = req.params
@@ -39,4 +28,5 @@ const deleteUser = async(req,res) => {
     res.sendStatus(202)
 }
 
-module.exports = { get, create,findOne,deleteUser };
+
+module.exports = { get,findOne,deleteUser };
