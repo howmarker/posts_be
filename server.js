@@ -22,6 +22,8 @@ app.use('/register',require('./src/routes/users/register.js'))
 app.use('/login', require('./src/routes/users/login'))
 app.use('/logout',require('./src/routes/users/logout'))
 
+app.use('/posts',require('./src/routes/posts/postRoutes'))
+
 //handle error
 app.use(errorHandle)
 
