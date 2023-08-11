@@ -20,6 +20,7 @@ const errorHandle = require('./src/middlewares/handleError')
 app.use('/user',require('./src/routes/users/userRotes.js'))
 app.use('/register',require('./src/routes/users/register.js'))
 app.use('/login', require('./src/routes/users/login'))
+app.use('/logout',require('./src/routes/users/logout'))
 
 //handle error
 app.use(errorHandle)
