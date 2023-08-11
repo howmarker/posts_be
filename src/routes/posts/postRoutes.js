@@ -4,6 +4,7 @@ const postController = require('../../controllers/posts/postController')
 const verifyJWT = require('../../middlewares/verifyJWT')
 
 router.get('/',postController.getAll)
+router.get('/:id',postController.getOne)
 
 //verify jwt
 router.use(verifyJWT)
