@@ -11,6 +11,7 @@ router.get('/:id',postController.getOne)
 //verify jwt
 router.use(verifyJWT)
 router.post('/',postController.create)
+router.post('/:id',postController.updateOne)
 
 //verify role
 router.post('/change-status/:id',verifyRoles([ROLES.ADMIN]),postController.changeStatus)

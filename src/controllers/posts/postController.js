@@ -1,3 +1,4 @@
+const moment = require("moment/moment");
 const statusPost = require("../../constants/status");
 const AppError = require("../../errors/AppError");
 const postService = require("../../services/posts.service");
@@ -36,9 +37,27 @@ const changeStatus = async (req, res) => {
   res.sendStatus(200);
 };
 
-// const updateOne = async(req,res) => {
-//     const {id} = req.params
-//     const {title,desc} = req.params
-// }
+const updateOne = async (req, res) => {
+  const { id } = req.params;
+  const { title, desc, user_id } = req.body;
 
-module.exports = { getAll, create, getOne, changeStatus };
+  const findPost = await postService.findOne('id', id);
+
+  if (!findPost) throw new AppError("not found", 404);
+  if(findPost.user_id !== user_id)  throw new AppError("unauthorized", 401);
+
+  await postService.update(
+    ["title", "description", "updated_at"],
+    [
+      title || findPost.title,
+      desc || findPost.description,
+      moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+    ],
+    "id",
+    id
+  );
+
+  res.sendStatus(200);
+};
+
+module.exports = { getAll, create, getOne, changeStatus, updateOne };
