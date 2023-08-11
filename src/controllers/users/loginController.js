@@ -12,7 +12,7 @@ const login = async (req, res) => {
     throw new AppError("Username and password are required", 400);
 
   //check existing db;
-  const findUser = (await userService.findByName(username))[0];
+  const findUser = (await userService.findOne('username',username));
 
   if (!findUser) throw new AppError("User not found", 400);
 
@@ -46,7 +46,10 @@ const login = async (req, res) => {
   );
 
 
-  //send refresh token via cookie
+  //send refresh token via cookie and set into db
+
+  await userService.update(['refreshToken'],[refreshToken],'username',username)
+
   res.cookie('refreshToken',refreshToken,{
     secure : true,
     httpOnly : true,

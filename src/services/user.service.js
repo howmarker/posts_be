@@ -9,11 +9,18 @@ const create = (username, password) =>
     [username, password, [ROLES.USER],new Date()]
   );
 
-const findByName = (username) =>
-  db.query("SELECT * FROM users WHERE username = ? LIMIT 1", [username]);
+const findOne = async (key,value) =>  {
+  const data = await db.query(`SELECT * FROM users WHERE ${key} = ?`, [value])
+  return data[0]
+};
 
-const findById = (id) => db.query(`SELECT * FROM users WHERE id = ?`,[id])
+const update = async (keys,values,keyCondition,valueCondition) => {
+  let queryUpdate = ''
+  keys.forEach((key,index) => queryUpdate = queryUpdate + ` ${index === 0 ? "" : ","} ${key} = '${values[index]}'`)
+
+  await db.query(`UPDATE users SET ${queryUpdate} where ${keyCondition} = ? `,[valueCondition])
+}
 
 const deleteUser = (id) => db.query(`DELETE FROM users where id = ?`,[id])
 
-module.exports = { get, findByName,create,findById,deleteUser };
+module.exports = { get,create,deleteUser,findOne,update };

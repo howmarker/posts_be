@@ -7,26 +7,23 @@ const get = async (req, res) => {
   res.send(data);
 };
 
+const findOne = async (req, res) => {
+  const { id } = req.params;
 
+  if (!id) throw new Error("ID is required", 400);
+  const findUser = await userService.findOne("id",id);
+  if (!findUser) throw new AppError("Not found", 404);
+  res.status(200).send(findUser);
+};
 
-const findOne = async(req,res) => {
-    const {id} = req.params
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
 
-    if(!id) throw new Error('ID is required',400)
-    const findUser = await userService.findById(id);
-    if(findUser.length === 0) throw new AppError('Not found',404)
-    res.status(200).send(findUser[0])
-}
+  if (!id) throw new Error("ID is required", 400);
+  const findUser = await userService.findOne("id",id);
+  if (!findUser) throw new AppError("Not found", 404);
+  await userService.deleteUser(id);
+  res.sendStatus(202);
+};
 
-const deleteUser = async(req,res) => {
-    const {id} = req.params
-
-    if(!id) throw new Error('ID is required',400)
-    const findUser = await userService.findById(id);
-    if(findUser.length === 0) throw new AppError('Not found',404)
-    await userService.deleteUser(id)
-    res.sendStatus(202)
-}
-
-
-module.exports = { get,findOne,deleteUser };
+module.exports = { get, findOne, deleteUser };
