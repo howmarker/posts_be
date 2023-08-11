@@ -21,7 +21,7 @@ const errorHandle = require('./src/middlewares/handleError')
 app.use('/register',require('./src/routes/users/register.js'))
 app.use('/login', require('./src/routes/users/login'))
 app.use('/logout',require('./src/routes/users/logout'))
-
+app.use('/refreshToken',require('./src/routes/users/refreshToken'))
 app.use('/posts',require('./src/routes/posts/postRoutes'))
 
 //jwt verify
