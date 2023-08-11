@@ -13,4 +13,17 @@ const findOne = async (key, value) => {
   return data[0];
 };
 
-module.exports = { get, create, findOne };
+const update = async (keys, values, keyCondition, valueCondition) => {
+  let queryUpdate = "";
+  keys.forEach(
+    (key, index) =>
+      (queryUpdate =
+        queryUpdate + ` ${index === 0 ? "" : ","} ${key} = '${values[index]}'`)
+  );
+
+  await db.query(`UPDATE post SET ${queryUpdate} where ${keyCondition} = ? `, [
+    valueCondition,
+  ]);
+};
+
+module.exports = { get, create, findOne,update };
