@@ -1,12 +1,11 @@
-const ROLES = require("../constants/roles");
 const db = require("./db.service");
 
 const get = () => db.query(`SELECT * from users`);
 
 const create = (username, password) =>
   db.query(
-    `INSERT INTO users (username,password,role,created_at)  VALUES (?,?,?,?)`,
-    [username, password, [ROLES.USER],new Date()]
+    `INSERT INTO users (username,password,created_at)  VALUES (?,?,?)`,
+    [username, password,new Date()]
   );
 
 const findOne = async (key,value) =>  {

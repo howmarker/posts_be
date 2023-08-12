@@ -14,7 +14,6 @@ async function verifyJWT(req, res, next) {
     ...req.body,
     user_id : findUser.id,
     username : findUser.username,
-    role : findUser.role
   }
 
 
