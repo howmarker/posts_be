@@ -1,5 +1,6 @@
 const AppError = require("../../errors/AppError");
 const userService = require("../../services/user.service");
+const roleService = require('../../services/role.service')
 
 const get = async (req, res) => {
   const data = await userService.get();
@@ -26,4 +27,16 @@ const deleteUser = async (req, res) => {
   res.sendStatus(202);
 };
 
-module.exports = { get, findOne, deleteUser };
+const updateRole = async (req,res) => {
+  // const {user_id,role} = req.body;
+  // if(!user_id  || !role) throw new AppError('user_id and role is must be required',400)
+  // const availableRole = await roleService.findRoles('role',role)
+
+  // if(!availableRole) throw new AppError('not available role',400)
+  // const userRole = await roleService.getRolesUser(user_id);
+
+  // if()
+
+}
+
+module.exports = { get, findOne, deleteUser,updateRole };

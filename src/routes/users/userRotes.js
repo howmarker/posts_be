@@ -8,5 +8,6 @@ router.use(verifyRole(['ADMIN']))
 router.get('/',userControllers.get)
 router.get('/:id',userControllers.findOne)
 router.delete('/:id',userControllers.deleteUser)
+router.post('/update-role',userControllers.updateRole)
 
 module.exports = router
