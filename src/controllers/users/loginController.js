@@ -8,13 +8,15 @@ const moment = require('moment')
 const login = async (req, res) => {
   const { username, password } = req.body;
 
+
   if (!username || !password)
     throw new AppError("Username and password are required", 400);
 
   //check existing db;
-  const findUser = (await userService.findOne('username',username));
+  const findUser = (await userService.findAllUserOne('username',username));
 
   if (!findUser) throw new AppError("User not found", 400);
+
 
   const matchedPwd = bcrypt.compareSync(password, findUser.password);
   if (!matchedPwd) throw new AppError("Password is incorrect", 400);
