@@ -9,5 +9,6 @@ router.get('/',userControllers.get)
 router.get('/:id',userControllers.findOne)
 router.delete('/:id',userControllers.deleteUser)
 router.post('/update-role',userControllers.updateRole)
+router.post('/remove-role',userControllers.removeRole)
 
 module.exports = router
