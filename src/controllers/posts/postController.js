@@ -22,7 +22,9 @@ const create = async (req, res) => {
   const { title, desc, user_id } = req.body;
   if (!title || !desc)
     throw new AppError("title and description are required", 400);
-  await postService.create(title, desc, user_id);
+  const defaultStatus = await postService.getStatusPost(statusPost.PENDING)
+
+  await postService.create(title, desc,defaultStatus.id ,user_id);
   res.sendStatus(201);
 };
 
@@ -33,9 +35,9 @@ const changeStatus = async (req, res) => {
   const findPost = await postService.findOne("id", id);
   if (!findPost) throw new AppError("Not found", 404);
 
-  if (!status || !Object.entries(statusPost).find((item) => item[1] === status))
-    throw new AppError("status not in constants", 400);
-  await postService.update(["status"], [status], "id", id);
+  const statusChange = await postService.getStatusPost(status)
+  if(!statusChange) throw new AppError(`Bad status`,400)
+  await postService.update(["status_id"], [statusChange.id], "id", id);
   res.sendStatus(200);
 };
 
