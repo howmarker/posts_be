@@ -1,12 +1,25 @@
 const db = require("./db.service");
-const statusPost = require("../constants/status");
 
-const get = () => db.query("SELECT * FROM post");
-const create = async (title, desc, user_id) => {
+const get = () =>
+  db.query(
+    `SELECT P.id,P.title,P.description,P.created_at,S_P.value as status,P.user_id,P.updated_at,
+    json_object(
 
+      
+    )
+    FROM post as P 
+    join statuspost as S_P 
+    on P.status_id = S_P.id
+    join users as U on U.id =P.user_id 
+    `
+  );
+
+
+
+const create = async (title, desc, status_id, user_id) => {
   await db.query(
-    `INSERT post (title,description,user_id,status,created_at) VALUES (?,?,?,?,?)`,
-    [title, desc, user_id, statusPost.PENDING, new Date()]
+    `INSERT post (title,description,user_id,status_id,created_at) VALUES (?,?,?,?,?)`,
+    [title, desc, user_id, status_id, new Date()]
   );
 };
 
@@ -27,6 +40,14 @@ const update = async (keys, values, keyCondition, valueCondition) => {
   ]);
 };
 
+const getStatusPost = async (value) => {
+  const data = await db.query(`SELECT * FROM statuspost WHERE value = ? `, [
+    value,
+  ]);
+
+  return data[0];
+};
+
 const deletePost = (id) => db.query(`DELETE FROM post WHERE id = ?`, [id]);
 
-module.exports = { get, create, findOne, update, deletePost };
+module.exports = { get, create, findOne, update, deletePost, getStatusPost };
