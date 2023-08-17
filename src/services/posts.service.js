@@ -4,9 +4,10 @@ const get = () =>
   db.query(
     `SELECT P.id,P.title,P.description,P.created_at,S_P.value as status,P.user_id,P.updated_at,
     json_object(
-
-      
-    )
+      'id',U.id,
+      'username',U.username,
+      'created_at',U.created_at
+    ) as user
     FROM post as P 
     join statuspost as S_P 
     on P.status_id = S_P.id
@@ -24,7 +25,17 @@ const create = async (title, desc, status_id, user_id) => {
 };
 
 const findOne = async (key, value) => {
-  const data = await db.query(`SELECT * FROM post WHERE ${key} = ?`, [value]);
+  const data = await db.query(`
+  SELECT P.id,P.title,P.description,P.created_at,S_P.value as status,P.user_id,P.updated_at,
+  json_object(
+    'id',U.id,
+    'username',U.username,
+    'created_at',U.created_at
+  ) as user
+  FROM post as P 
+  join statuspost as S_P 
+  on P.status_id = S_P.id
+  join users as U on U.id =P.user_id  WHERE P.${key} = ?`, [value]);
   return data[0];
 };
 
